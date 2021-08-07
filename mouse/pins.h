@@ -29,6 +29,6 @@
 // 26 grounded
 #define TP22 27
 #define TP23 28 // AIN4
-#define TP19 29 // AIN5
-#define TP20 30 // AIN6
+#define WHL_LED 29 // AIN5
+#define WHL_DETECTOR 30 // AIN6
 #define TP21 31 // AIN7

@@ -98,7 +98,7 @@ static void hero_83_80_03_x(const uint8_t x)
 	hero_reg_write(0x03, x);
 	spi_cs_high();
 }
-/*
+
 static void hero_sleep(void)
 {
 	spi_cs_low();
@@ -113,7 +113,7 @@ static void hero_wake_from_sleep(void)
 	// TODO disable waking
 	hero_83_80_03_x(0x20);
 	delay_us(10);
-	(void)hero_motion_burst(1);
+	(void)hero_read_motion();
 	delay_us(20);
 	hero_83_80_03_x(0x20);
 }
@@ -126,7 +126,7 @@ static void hero_deepsleep(void)
 	hero_83_80_03_x(0x28);
 	// TODO configure waking from deepsleep
 }
-*/
+/**/
 
 __attribute__((optimize("Os")))
 static int hero_init(const uint32_t dpi)

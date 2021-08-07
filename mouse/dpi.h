@@ -4,7 +4,7 @@
 #include "hero.h"
 
 #define DPI_INDEX_BOOT 1
-const uint32_t dpi_list[] = {50, 800, 3200, 12800};
+const uint32_t dpi_list[] = {400, 800, 1600, 3200};
 const int dpi_list_len = sizeof(dpi_list)/sizeof(dpi_list[0]);
 
 void dpi_process(uint8_t btn_now) {

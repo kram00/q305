@@ -78,6 +78,17 @@ int main(void)
 			NRF_RADIO->TASKS_STOP = 1;
 			NRF_RADIO->TASKS_DISABLE = 1;
 			radio_conf_tx();
+			
+			LED_ENABLE();
+			LED_ON(LED_B);
+			delay_us(8000);
+			LED_OFF(LED_B);
+			LED_DISABLE();
+			
+			hero_deepsleep();
+			delay_us(1);
+			NRF_POWER->SYSTEMOFF = 1;
+			hero_wake_from_sleep();
 		} else { // address match
 			radio_wait_disabled();
 			radio_conf_tx();
@@ -90,7 +101,7 @@ int main(void)
 
 	uint32_t sync_timeout = 0; // synchronize after 1s inactivity
 	uint32_t idle_timeout = 0; // TODO implement power saving
-	for (;;) {
+	for (;; sync_timeout++) {
 		loop_wait();
 		const union motion_data motion = hero_read_motion();
 		radio_pkt_tx.mouse.x += motion.dx;
@@ -102,9 +113,9 @@ int main(void)
 		dpi_process(btn_now);
 		radio_pkt_tx.mouse.btn = btn_now & 0b00011111;
 
-		if (sync_timeout == 8000) { // sync
-			radio_pkt_tx.mouse.btn |= RADIO_MOUSE_SYNC;
-		}
+		// if (sync_timeout == 8000) { // sync
+			// radio_pkt_tx.mouse.btn |= RADIO_MOUSE_SYNC;
+		// }
 
 		if (radio_pkt_tx.mouse_compact.x_y != radio_pkt_tx_prev.mouse_compact.x_y ||
 			radio_pkt_tx.mouse_compact.btn_whl != radio_pkt_tx_prev.mouse_compact.btn_whl) {
@@ -113,8 +124,11 @@ int main(void)
 			radio_pkt_tx_prev = radio_pkt_tx;
 			sync_timeout = 0;
 			idle_timeout = 0;
+		} else if (sync_timeout == 8000) { // sync
+			radio_pkt_tx.mouse.btn |= RADIO_MOUSE_SYNC;
 		} else {
-			sync_timeout++;
+			// sync_timeout++;
+			idle_timeout++;
 		}
 
 		if ((radio_pkt_tx.mouse.btn & RADIO_MOUSE_SYNC) != 0) {
@@ -140,6 +154,26 @@ int main(void)
 				}
 			}
 			radio_conf_tx();
+		}
+		// if (idle_timeout > 480000) { // 1min
+			// -- system on --
+			// sync_timeout = 0;
+			// idle_timeout = 0;
+			// whl_led_off();
+			// delay_us(1000);
+			// NRF_POWER->EVENTS_SLEEPENTER = 1;
+		// }
+
+		if (idle_timeout > 960000) { // 2min
+			// -- system off --
+			// sync_timeout = 0;
+			// idle_timeout = 0;
+			delay_us(1000);
+			// hero_sleep();
+			hero_deepsleep();
+			delay_us(1000);
+			NRF_POWER->SYSTEMOFF = 1;
+			hero_wake_from_sleep();
 		}
 	}
 }
