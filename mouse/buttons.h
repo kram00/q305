@@ -7,19 +7,33 @@
 
 #define BUTTON_RELEASE_DEBOUNCE 16
 
-static_assert(
-	BTN_R == BTN_L + 1 &&
-	BTN_M == BTN_L + 2 &&
-	BTN_F == BTN_L + 3 &&
-	BTN_B == BTN_L + 4 &&
-	BTN_DPI == BTN_L + 5,
-	"button pins not contiguous. change buttons_read_raw()"
-);
+// static_assert(
+	// BTN_R == BTN_L + 1 &&
+	// BTN_M == BTN_L + 2 &&
+	// BTN_F == BTN_L + 3 &&
+	// BTN_B == BTN_L + 4 &&
+	// BTN_DPI == BTN_L + 5,
+	// "button pins not contiguous. change buttons_read_raw()"
+// );
+
+// static inline uint8_t buttons_read_raw(void)
+// {
+	// uint8_t ret = (NRF_P0->LATCH >> BTN_L) & 0b00111111;
+	// NRF_P0->LATCH = 0b00111111 << BTN_L;
+	// return ret;
+// }
 
 static inline uint8_t buttons_read_raw(void)
 {
-	uint8_t ret = (NRF_P0->LATCH >> BTN_L) & 0b00111111;
-	NRF_P0->LATCH = 0b00111111 << BTN_L;
+	uint8_t ret=0;
+
+	ret |= ((NRF_P0->LATCH >> BTN_L) << 0);
+	ret |= ((NRF_P0->LATCH >> BTN_R) << 1);
+	ret |= ((NRF_P0->LATCH >> BTN_M) << 2);
+	ret |= ((NRF_P0->LATCH >> BTN_F) << 3);
+	ret |= ((NRF_P0->LATCH >> BTN_B) << 4);
+	ret |= ((NRF_P0->LATCH >> BTN_DPI) << 5);
+	NRF_P0->LATCH = 0x9E000800;
 	return ret;
 }
 
@@ -60,5 +74,6 @@ static void buttons_init(void)
 	NRF_P0->PIN_CNF[BTN_DPI] = pullup_in;
 
 	delay_us(1000);
-	NRF_P0->LATCH = 0b00111111 << BTN_L;
+	// NRF_P0->LATCH = 0b00111111 << BTN_L;
+	NRF_P0->LATCH = 0x9E000800;
 }

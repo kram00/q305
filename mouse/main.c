@@ -34,7 +34,6 @@ static void init(void)
 
 	spi_init();
 	if (hero_init(dpi_list[DPI_INDEX_BOOT]) != 0) { // blob upload failed
-		LED_ENABLE();
 		LED_ON(LED_B);
 		while (1) __WFI();
 	}
@@ -79,11 +78,9 @@ int main(void)
 			NRF_RADIO->TASKS_DISABLE = 1;
 			radio_conf_tx();
 			
-			LED_ENABLE();
 			LED_ON(LED_B);
 			delay_us(8000);
 			LED_OFF(LED_B);
-			LED_DISABLE();
 			
 			hero_deepsleep();
 			delay_us(1);
