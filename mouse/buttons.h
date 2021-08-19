@@ -27,13 +27,20 @@ static inline uint8_t buttons_read_raw(void)
 {
 	uint8_t ret=0;
 
-	ret |= ((NRF_P0->LATCH >> BTN_L) << 0);
-	ret |= ((NRF_P0->LATCH >> BTN_R) << 1);
-	ret |= ((NRF_P0->LATCH >> BTN_M) << 2);
-	ret |= ((NRF_P0->LATCH >> BTN_F) << 3);
-	ret |= ((NRF_P0->LATCH >> BTN_B) << 4);
-	ret |= ((NRF_P0->LATCH >> BTN_DPI) << 5);
-	NRF_P0->LATCH = 0x9E000800;
+	// ret |= ((NRF_P0->LATCH >> BTN_L) << 0);
+	// ret |= ((NRF_P0->LATCH >> BTN_R) << 1);
+	// ret |= ((NRF_P0->LATCH >> BTN_M) << 2);
+	// ret |= ((NRF_P0->LATCH >> BTN_F) << 3);
+	// ret |= ((NRF_P0->LATCH >> BTN_B) << 4);
+	// ret |= ((NRF_P0->LATCH >> BTN_DPI) << 5);
+	// NRF_P0->LATCH = 0x9E000800;
+	
+	ret |= (!(NRF_P0->IN & (1 << BTN_L)) << 0);
+	ret |= (!(NRF_P0->IN & (1 << BTN_R)) << 1);
+	ret |= (!(NRF_P0->IN & (1 << BTN_M)) << 2);
+	ret |= (!(NRF_P0->IN & (1 << BTN_F)) << 3);
+	ret |= (!(NRF_P0->IN & (1 << BTN_B)) << 4);
+	ret |= (!(NRF_P0->IN & (1 << BTN_DPI)) << 5);
 	return ret;
 }
 
@@ -75,5 +82,5 @@ static void buttons_init(void)
 
 	delay_us(1000);
 	// NRF_P0->LATCH = 0b00111111 << BTN_L;
-	NRF_P0->LATCH = 0x9E000800;
+	// NRF_P0->LATCH = 0x9E000800;
 }

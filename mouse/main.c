@@ -156,6 +156,7 @@ int main(void)
 			// -- system on --
 			// sync_timeout = 0;
 			// idle_timeout = 0;
+			// delay_us(1000);
 			// whl_led_off();
 			// delay_us(1000);
 			// NRF_POWER->EVENTS_SLEEPENTER = 1;
@@ -163,8 +164,8 @@ int main(void)
 
 		if (idle_timeout > 960000) { // 2min
 			// -- system off --
-			// sync_timeout = 0;
-			// idle_timeout = 0;
+			delay_us(1000);
+			whl_led_off();
 			delay_us(1000);
 			// hero_sleep();
 			hero_deepsleep();

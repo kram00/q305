@@ -18,7 +18,7 @@ static inline int wheel_read_A_B(void)
 	delay_us(1);
 	NRF_P0->DIRCLR = 1 << WHL_DETECTOR;
 	delay_us(1);
-	int8_t b = (NRF_P0->IN >> WHL_DETECTOR) != 0;
+	int8_t b = (NRF_P0->IN & (1 << WHL_DETECTOR)) != 0;
 
 	delay_us(1);
 
@@ -30,7 +30,7 @@ static inline int wheel_read_A_B(void)
 	delay_us(1);
 	NRF_P0->DIRCLR = 1 << WHL_DETECTOR;
 	delay_us(1);
-	int8_t a = (NRF_P0->IN >> WHL_DETECTOR) != 0;
+	int8_t a = (NRF_P0->IN & (1 << WHL_DETECTOR)) != 0;
 
 	return (a - b);
 	// toggle wheel led for ~25us after calling this function
@@ -62,8 +62,8 @@ static inline int wheel_read(void)
 	
 	const int8_t _whl_ticks = wheel_read_A_B(); 
 	whl_led_on();
-	delay_us(25); // toggle wheel for next cycle's read
-	whl_led_off();
+	// delay_us(25); // toggle wheel for next cycle's read
+	// whl_led_off();
 			
 	whl_ticks += _whl_ticks;
 	if (_whl_ticks != 0) {
