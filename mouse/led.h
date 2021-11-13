@@ -25,3 +25,19 @@ static void led_init(void)
 	// NRF_P0->PIN_CNF[LED_G] = out;
 	NRF_P0->PIN_CNF[LED_B] = out;
 }
+
+void blink(int times)
+{
+	int j;
+	for ( j = 0; j < times; j++ ) {
+		uint32_t volatile tmo;
+
+		tmo = 2000000;
+		while (tmo--);
+		NRF_P0->OUTSET = (1 << LED_B);
+
+		tmo = 2000000;
+		while (tmo--);
+		NRF_P0->OUTCLR = (1 << LED_B);
+	}
+}

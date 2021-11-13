@@ -279,7 +279,7 @@ static int hero_init(const uint32_t dpi)
 	delay_us(50);
 
 	spi_cs_low();
-	hero_reg_write(0x20, 6); // framerate about 8300fps
+	hero_reg_write(0x20, 50); // framerate about 1000fps
 	spi_cs_high();
 
 	return 0;

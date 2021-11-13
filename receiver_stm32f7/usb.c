@@ -486,4 +486,3 @@ void OTG_HS_IRQHandler(void)
       __HAL_PCD_CLEAR_FLAG(&hpcd, USB_OTG_GINTSTS_ENUMDNE);
     }
 }
-

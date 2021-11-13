@@ -61,8 +61,8 @@
 #define USBD_VID                      0x04d8
 #define USBD_PID                      0xA3CF
 #define USBD_LANGID_STRING            0x409
-#define USBD_MANUFACTURER_STRING      L"qsxcv"
-#define USBD_PRODUCT_STRING           L"q305"
+#define USBD_MANUFACTURER_STRING      L"krm"
+#define USBD_PRODUCT_STRING           L"g100shero"
 #define USBD_CONFIGURATION_STRING     L"HID Config"
 #define USBD_INTERFACE_STRING         L"HID Interface"
 
