@@ -1,6 +1,6 @@
 #include <stdint.h>
 #include <nrf.h>
-// #include "led.h"
+#include "led.h"
 #include "radio.h"
 #include "spi.h"
 
@@ -16,7 +16,7 @@ static void init(void)
 	while (NRF_CLOCK->EVENTS_HFCLKSTARTED == 0);
 
 	NRF_POWER->TASKS_CONSTLAT = 1;
-	// led_init();
+	led_init();
 	spi_init();
 	radio_init();
 	radio_conf_tx();
@@ -85,20 +85,20 @@ LOW(4);
 HIGH(4);
 		if (NRF_RADIO->CRCSTATUS == RADIO_CRCSTATUS_CRCSTATUS_CRCError) {
 			radio_pkt_tx.mouse.btn |= RADIO_MOUSE_IGNORE;
-// LED_TOGGLE(LED_4);
+LED_TOGGLE(LED_4);
 			continue;
 		}
 
-		// if (radio_pkt_tx.mouse.btn & 1) // lmb pressed
-			// LED_ON(LED_2);
-		// else
-			// LED_OFF(LED_2);
+		if (radio_pkt_tx.mouse.btn & 1) // lmb pressed
+			LED_ON(LED_2);
+		else
+			LED_OFF(LED_2);
 
 		// spi easydma reads from radio_pkt_tx.mouse
 
 		// if mouse requests sync
 		if (radio_pkt_tx.mouse.btn & RADIO_MOUSE_SYNC) {
-// LED_TOGGLE(LED_3);
+LED_TOGGLE(LED_3);
 			int diff = NRF_TIMER0->CC[2] - ideal_rx_time;
 			if (diff > nominal_period/2) // probably spi isn't active
 				diff = 0;

@@ -115,7 +115,6 @@ int main(void)
 		spi_cs_high();
 
 		if ((rx.btn & RADIO_MOUSE_IGNORE) != 0) {
-			LED_G_TOGGLE();
 			continue;
 		} else if ((rx.btn & RADIO_MOUSE_FIRST) != 0) {
 			whl_prev = rx.whl;

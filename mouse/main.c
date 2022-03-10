@@ -16,6 +16,7 @@
 #include "hero.h"
 #include "dpi.h"
 #include "radio.h"
+#include "battery.h"
 
 static void init(void)
 {
@@ -31,9 +32,12 @@ static void init(void)
 	led_init();
 	buttons_init();
 	wheel_init();
+	battery_init();
+	timer_init();
 
 	spi_init();
-	if (hero_init(dpi_list[DPI_INDEX_BOOT]) != 0) { // blob upload failed
+	// if (hero_init(dpi_list[DPI_INDEX_BOOT]) != 0) { // blob upload failed
+	if (hero_init(dpi_list[*(p_addr)],fr_list[*(p_addr2)]) != 0) {
 		LED_ON(LED_B);
 		while (1) __WFI();
 	}
@@ -98,8 +102,9 @@ int main(void)
 
 	uint32_t sync_timeout = 0; // synchronize after 1s inactivity
 	uint32_t idle_timeout = 0; // TODO implement power saving
-	for (;; sync_timeout++) {
+	for (;; idle_timeout++) {
 		loop_wait();
+		run_timer();
 		const union motion_data motion = hero_read_motion();
 		radio_pkt_tx.mouse.x += motion.dx;
 		radio_pkt_tx.mouse.y += motion.dy;
@@ -110,9 +115,9 @@ int main(void)
 		dpi_process(btn_now);
 		radio_pkt_tx.mouse.btn = btn_now & 0b00011111;
 
-		// if (sync_timeout == 8000) { // sync
-			// radio_pkt_tx.mouse.btn |= RADIO_MOUSE_SYNC;
-		// }
+		if (sync_timeout == 8000) { // sync
+			radio_pkt_tx.mouse.btn |= RADIO_MOUSE_SYNC;
+		}
 
 		if (radio_pkt_tx.mouse_compact.x_y != radio_pkt_tx_prev.mouse_compact.x_y ||
 			radio_pkt_tx.mouse_compact.btn_whl != radio_pkt_tx_prev.mouse_compact.btn_whl) {
@@ -121,11 +126,8 @@ int main(void)
 			radio_pkt_tx_prev = radio_pkt_tx;
 			sync_timeout = 0;
 			idle_timeout = 0;
-		} else if (sync_timeout == 8000) { // sync
-			radio_pkt_tx.mouse.btn |= RADIO_MOUSE_SYNC;
 		} else {
-			// sync_timeout++;
-			idle_timeout++;
+			sync_timeout++;
 		}
 
 		if ((radio_pkt_tx.mouse.btn & RADIO_MOUSE_SYNC) != 0) {
@@ -166,6 +168,8 @@ int main(void)
 			// -- system off --
 			delay_us(1000);
 			whl_led_off();
+			delay_us(1000);
+			LED_OFF(LED_B);
 			delay_us(1000);
 			// hero_sleep();
 			hero_deepsleep();

@@ -82,8 +82,6 @@ static void wheel_init(void)
 		(GPIO_PIN_CNF_DIR_Output << GPIO_PIN_CNF_DIR_Pos) |
 		(GPIO_PIN_CNF_INPUT_Disconnect << GPIO_PIN_CNF_INPUT_Pos);
 	whl_led_on();
-	// delay_us(25);
-	// whl_led_off();
 
 	const int in =
 		(GPIO_PIN_CNF_DIR_Input << GPIO_PIN_CNF_DIR_Pos) |

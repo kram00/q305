@@ -129,7 +129,7 @@ static void hero_deepsleep(void)
 /**/
 
 __attribute__((optimize("Os")))
-static int hero_init(const uint32_t dpi)
+static int hero_init(const uint32_t dpi, const uint32_t fr)
 {
 	// 0
 	spi_cs_low();
@@ -279,7 +279,8 @@ static int hero_init(const uint32_t dpi)
 	delay_us(50);
 
 	spi_cs_low();
-	hero_reg_write(0x20, 50); // framerate about 1000fps
+	// hero_reg_write(0x20, 6); // framerate about 8300fps
+	hero_reg_write(0x20, fr); // sets framerate
 	spi_cs_high();
 
 	return 0;
