@@ -55,7 +55,7 @@ void check_battery_voltage(void)
 
 	// if (result < 2950) {
 	if (result < 1550) { // 3V
-		LED_ON(LED_B);
+		LED_ON(LED_R);
 	}
 
 	// Stop the SAADC, since it's not used anymore.
@@ -107,6 +107,6 @@ void run_timer(void)
 	if ((NRF_TIMER0->EVENTS_COMPARE[1] != 0))
 		{
 			NRF_TIMER0->EVENTS_COMPARE[1] = 0;
-			LED_OFF(LED_B);
+			LED_OFF(LED_R);
 		}
 }

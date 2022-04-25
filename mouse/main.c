@@ -38,7 +38,7 @@ static void init(void)
 	spi_init();
 	// if (hero_init(dpi_list[DPI_INDEX_BOOT]) != 0) { // blob upload failed
 	if (hero_init(dpi_list[*(p_addr)],fr_list[*(p_addr2)]) != 0) {
-		LED_ON(LED_B);
+		LED_ON(LED_R);
 		while (1) __WFI();
 	}
 	hero_conf_motion();
@@ -82,9 +82,9 @@ int main(void)
 			NRF_RADIO->TASKS_DISABLE = 1;
 			radio_conf_tx();
 			
-			LED_ON(LED_B);
+			LED_ON(LED_R);
 			delay_us(8000);
-			LED_OFF(LED_B);
+			LED_OFF(LED_R);
 			
 			hero_deepsleep();
 			delay_us(1);
@@ -119,13 +119,28 @@ int main(void)
 			radio_pkt_tx.mouse.btn |= RADIO_MOUSE_SYNC;
 		}
 
-		if (radio_pkt_tx.mouse_compact.x_y != radio_pkt_tx_prev.mouse_compact.x_y ||
-			radio_pkt_tx.mouse_compact.btn_whl != radio_pkt_tx_prev.mouse_compact.btn_whl) {
+		// if (radio_pkt_tx.mouse_compact.x_y != radio_pkt_tx_prev.mouse_compact.x_y ||
+			// radio_pkt_tx.mouse_compact.btn_whl != radio_pkt_tx_prev.mouse_compact.btn_whl) {
+			// NRF_RADIO->TASKS_TXEN = 1;
+			// radio_wait_disabled();
+			// radio_pkt_tx_prev = radio_pkt_tx;
+			// sync_timeout = 0;
+			// idle_timeout = 0;
+		// } else {
+			// sync_timeout++;
+		// }
+
+		if (radio_pkt_tx.mouse_compact.x_y != radio_pkt_tx_prev.mouse_compact.x_y) {
 			NRF_RADIO->TASKS_TXEN = 1;
 			radio_wait_disabled();
 			radio_pkt_tx_prev = radio_pkt_tx;
 			sync_timeout = 0;
 			idle_timeout = 0;
+		} else if (radio_pkt_tx.mouse_compact.btn_whl != radio_pkt_tx_prev.mouse_compact.btn_whl) {
+			NRF_RADIO->TASKS_TXEN = 1;
+			radio_wait_disabled();
+			radio_pkt_tx_prev = radio_pkt_tx;
+			sync_timeout = 0;
 		} else {
 			sync_timeout++;
 		}
@@ -169,9 +184,8 @@ int main(void)
 			delay_us(1000);
 			whl_led_off();
 			delay_us(1000);
-			LED_OFF(LED_B);
+			LED_OFF(LED_R);
 			delay_us(1000);
-			// hero_sleep();
 			hero_deepsleep();
 			delay_us(1000);
 			NRF_POWER->SYSTEMOFF = 1;

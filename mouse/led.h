@@ -17,13 +17,13 @@ static void led_init(void)
 		(GPIO_PIN_CNF_DIR_Output << GPIO_PIN_CNF_DIR_Pos) |
 		(GPIO_PIN_CNF_INPUT_Disconnect << GPIO_PIN_CNF_INPUT_Pos);
 	// LED_OFF(LED_POWER);
-	// LED_OFF(LED_R);
+	LED_OFF(LED_R);
 	// LED_OFF(LED_G);
-	LED_OFF(LED_B);
+	// LED_OFF(LED_B);
 	// NRF_P0->PIN_CNF[LED_POWER] = out;
-	// NRF_P0->PIN_CNF[LED_R] = out;
+	NRF_P0->PIN_CNF[LED_R] = out;
 	// NRF_P0->PIN_CNF[LED_G] = out;
-	NRF_P0->PIN_CNF[LED_B] = out;
+	// NRF_P0->PIN_CNF[LED_B] = out;
 }
 
 void blink(int times)
@@ -34,10 +34,10 @@ void blink(int times)
 
 		tmo = 2000000;
 		while (tmo--);
-		NRF_P0->OUTSET = (1 << LED_B);
+		NRF_P0->OUTSET = (1 << LED_R);
 
 		tmo = 2000000;
 		while (tmo--);
-		NRF_P0->OUTCLR = (1 << LED_B);
+		NRF_P0->OUTCLR = (1 << LED_R);
 	}
 }

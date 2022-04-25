@@ -5,7 +5,7 @@
 #define SPI_MOSI 4
 #define SPI_MISO 5
 #define SPI_SCK 6
-#define LED_B 7
+#define LED_R 7
 #define BTN_R 11
 #define BTN_B 25
 #define BTN_F 26
