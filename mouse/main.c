@@ -36,7 +36,6 @@ static void init(void)
 	timer_init();
 
 	spi_init();
-	// if (hero_init(dpi_list[DPI_INDEX_BOOT]) != 0) { // blob upload failed
 	if (hero_init(dpi_list[*(p_addr)],fr_list[*(p_addr2)]) != 0) {
 		LED_ON(LED_R);
 		while (1) __WFI();
@@ -119,17 +118,6 @@ int main(void)
 			radio_pkt_tx.mouse.btn |= RADIO_MOUSE_SYNC;
 		}
 
-		// if (radio_pkt_tx.mouse_compact.x_y != radio_pkt_tx_prev.mouse_compact.x_y ||
-			// radio_pkt_tx.mouse_compact.btn_whl != radio_pkt_tx_prev.mouse_compact.btn_whl) {
-			// NRF_RADIO->TASKS_TXEN = 1;
-			// radio_wait_disabled();
-			// radio_pkt_tx_prev = radio_pkt_tx;
-			// sync_timeout = 0;
-			// idle_timeout = 0;
-		// } else {
-			// sync_timeout++;
-		// }
-
 		if (radio_pkt_tx.mouse_compact.x_y != radio_pkt_tx_prev.mouse_compact.x_y) {
 			NRF_RADIO->TASKS_TXEN = 1;
 			radio_wait_disabled();
@@ -169,15 +157,6 @@ int main(void)
 			}
 			radio_conf_tx();
 		}
-		// if (idle_timeout > 480000) { // 1min
-			// -- system on --
-			// sync_timeout = 0;
-			// idle_timeout = 0;
-			// delay_us(1000);
-			// whl_led_off();
-			// delay_us(1000);
-			// NRF_POWER->EVENTS_SLEEPENTER = 1;
-		// }
 
 		if (idle_timeout > 960000) { // 2min
 			// -- system off --

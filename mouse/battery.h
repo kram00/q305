@@ -2,9 +2,6 @@
 
 #include <nrf.h>
 
-// #define TRIGGER_INTERVAL1 250     // ms
-// #define TRIGGER_INTERVAL2 500     // ms
-
 void battery_init(void)
 {
 	// Configure SAADC singled-ended channel, Internal reference (0.6V) and 1/6 gain.
@@ -66,21 +63,6 @@ void check_battery_voltage(void)
 
 void timer_init(void)
 {
-	// NRF_TIMER0->MODE = TIMER_MODE_MODE_Timer;
-	// NRF_TIMER0->TASKS_CLEAR = 1;
-
-	// NRF_TIMER0->SHORTS = TIMER_SHORTS_COMPARE1_CLEAR_Enabled << TIMER_SHORTS_COMPARE1_CLEAR_Pos;
-	// NRF_TIMER0->PRESCALER = 4;
-	// NRF_TIMER0->BITMODE = TIMER_BITMODE_BITMODE_32Bit;
-	// NRF_TIMER0->CC[0] = TRIGGER_INTERVAL1 * 1000;
-	// NRF_TIMER0->CC[1] = TRIGGER_INTERVAL2 * 1000;
-
-	// NRF_TIMER0->INTENSET = (TIMER_INTENSET_COMPARE0_Enabled << TIMER_INTENSET_COMPARE0_Pos) | (TIMER_INTENSET_COMPARE1_Enabled << TIMER_INTENSET_COMPARE1_Pos);
-
-	// NVIC_EnableIRQ(TIMER0_IRQn);
-
-	// NRF_TIMER0->TASKS_START = 1;
-
 	NRF_TIMER0->MODE = TIMER_MODE_MODE_LowPowerCounter;
 	NRF_TIMER0->TASKS_CLEAR = 1;
 

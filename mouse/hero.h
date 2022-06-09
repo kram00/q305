@@ -126,7 +126,6 @@ static void hero_deepsleep(void)
 	hero_83_80_03_x(0x28);
 	// TODO configure waking from deepsleep
 }
-/**/
 
 __attribute__((optimize("Os")))
 static int hero_init(const uint32_t dpi, const uint32_t fr)
